@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 3 English: What is That? - Classroom Objects</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Kids -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandYellow: '#FFDE59',
+            brandOrange: '#FF914D',
+            brandPink: '#FF66C4',
+            brandPurple: '#8C52FF',
+            brandBlue: '#38B6FF',
+            brandGreen: '#7ED957',
+            brandDark: '#2D3748'
+          },
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            lexend: ['Lexend', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Fredoka', cursive, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 50%, #f3e8ff 100%);
+      min-height: 100vh;
+      user-select: none;
+    }
+    
+    .btn-bounce:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+    .btn-bounce:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .card-shadow {
+      box-shadow: 0 10px 0px rgba(0,0,0,0.08), 0 15px 25px rgba(0,0,0,0.05);
+    }
+
+    .talk-bubble {
+      position: relative;
+      background: #ffffff;
+      border-radius: 1.5rem;
+    }
+    .talk-bubble-left::after {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 20px;
+      border-width: 10px 15px 10px 0;
+      border-style: solid;
+      border-color: transparent #ffffff transparent transparent;
+    }
+    .talk-bubble-right::after {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 20px;
+      border-width: 10px 0 10px 15px;
+      border-style: solid;
+      border-color: transparent transparent transparent #ffffff;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #38B6FF;
+      border-radius: 10px;
+    }
+
+    /* Pulse animation for sound icon */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-audio {
+      animation: pulse-ring 1.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="text-slate-800 pb-12">
+
+  <!-- TOP HEADER & NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b-4 border-amber-300 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Title & Teacher Avatar -->
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center text-2xl shadow-md cursor-pointer hover:rotate-12 transition-transform" onclick="speak('Hello 3rd graders! Welcome to English Class with Ms. Lily!')">
+          👩‍🏫
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">ENGLISH LESSON: WHAT IS THAT?</h1>
+          <p class="text-xs sm:text-sm font-lexend text-slate-500">Grade 3 Elementary School • Classroom Objects</p>
+        </div>
+      </div>
+
+      <!-- Controls & Score -->
+      <div class="flex items-center gap-3">
+        <!-- Sound Effect Toggle -->
+        <button id="soundToggleBtn" onclick="toggleAudio()" class="bg-sky-100 text-sky-700 px-3 py-1.5 rounded-xl border-2 border-sky-300 font-semibold text-sm flex items-center gap-2 hover:bg-sky-200 transition-colors">
+          <i class="fas fa-volume-up text-lg text-sky-500"></i>
+          <span id="soundLabel" class="hidden sm:inline">Audio: ON</span>
+        </button>
+
+        <!-- Star Counter -->
+        <div class="bg-amber-100 border-2 border-amber-300 px-4 py-1.5 rounded-xl flex items-center gap-2 shadow-inner">
+          <i class="fas fa-star text-amber-500 text-xl animate-bounce"></i>
+          <span id="starScore" class="text-lg font-bold text-amber-800">0</span>
+          <span class="text-xs text-amber-600 font-semibold">Stars</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-amber-50 border-t border-amber-200 overflow-x-auto py-2 px-4 shadow-inner">
+      <div class="max-w-6xl mx-auto flex gap-2 min-w-max">
+        <button onclick="switchTab('tab-intro')" class="nav-btn active border-2 border-amber-400 bg-amber-400 text-amber-950 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 transition-all shadow-sm">
+          <i class="fas fa-hand-wave"></i> 1. Welcome
+        </button>
+        <button onclick="switchTab('tab-objects')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-pencil-ruler"></i> 2. Objects
+        </button>
+        <button onclick="switchTab('tab-grammar')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-question-circle"></i> 3. What is that?
+        </button>
+        <button onclick="switchTab('tab-a-an')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-font"></i> 4. A or AN?
+        </button>
+        <button onclick="switchTab('tab-colors')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-palette"></i> 5. Colors
+        </button>
+        <button onclick="switchTab('tab-numbers')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-calculator"></i> 6. Numbers 1-20
+        </button>
+        <button onclick="switchTab('tab-combine')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-puzzle-piece"></i> 7. Combine
+        </button>
+        <button onclick="switchTab('tab-dialogue')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-comments"></i> 8. Mini Dialogue
+        </button>
+        <button onclick="switchTab('tab-games')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-gamepad"></i> 9. Mini Games
+        </button>
+        <button onclick="switchTab('tab-quiz')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-trophy"></i> 10. Quiz
+        </button>
+        <button onclick="switchTab('tab-reflection')" class="nav-btn border-2 border-amber-200 bg-white text-slate-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-amber-100 transition-all shadow-sm">
+          <i class="fas fa-heart"></i> 11. Reflection
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-5xl mx-auto px-4 pt-6">
+
+    <!-- ================= 1. INTRO TAB ================= -->
+    <section id="tab-intro" class="tab-content space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border-4 border-amber-300 card-shadow text-center relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-amber-100 rounded-full blur-2xl opacity-70"></div>
+        <div class="relative z-10">
+          <span class="inline-block bg-amber-100 text-amber-800 font-bold px-4 py-1.5 rounded-full text-sm mb-4">
+            ✨ WELCOME CLASS OF GRADE 3!
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-amber-600 mb-3">LET'S LEARN ENGLISH!</h2>
+          <p class="text-lg text-slate-600 max-w-2xl mx-auto font-lexend mb-6">
+            Today we are going to explore our classroom and learn how to ask questions in English! 🌟
+          </p>
+
+          <!-- Speech Assistant Banner -->
+          <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4 max-w-xl mx-auto flex items-center gap-4 text-left shadow-sm mb-8 cursor-pointer hover:bg-sky-100 transition-colors" onclick="speak('Today we will learn: What is that? What color is it? and How many?')">
+            <div class="w-16 h-16 rounded-2xl bg-sky-400 text-white text-3xl flex items-center justify-center shrink-0 shadow">
+              🔊
+            </div>
+            <div>
+              <p class="font-bold text-sky-900 text-base">Click to Listen!</p>
+              <p class="text-sm text-sky-700 font-lexend">Click any speaker button or text box anytime to hear native English audio!</p>
+            </div>
+          </div>
+
+          <h3 class="text-xl font-bold text-slate-700 mb-4">📌 What will we learn today?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <div class="bg-gradient-to-b from-sky-50 to-sky-100 border-2 border-sky-300 p-5 rounded-2xl text-center transform hover:-translate-y-1 transition-transform">
+              <div class="text-4xl mb-2">❓</div>
+              <h4 class="font-bold text-sky-800 text-lg">What is that?</h4>
+              <p class="text-xs text-sky-600 font-lexend mt-1">Asking about objects around us.</p>
+            </div>
+            <div class="bg-gradient-to-b from-pink-50 to-pink-100 border-2 border-pink-300 p-5 rounded-2xl text-center transform hover:-translate-y-1 transition-transform">
+              <div class="text-4xl mb-2">🎨</div>
+              <h4 class="font-bold text-pink-800 text-lg">What color is it?</h4>
+              <p class="text-xs text-pink-600 font-lexend mt-1">Learning 10 bright colors!</p>
+            </div>
+            <div class="bg-gradient-to-b from-emerald-50 to-emerald-100 border-2 border-emerald-300 p-5 rounded-2xl text-center transform hover:-translate-y-1 transition-transform">
+              <div class="text-4xl mb-2">🔢</div>
+              <h4 class="font-bold text-emerald-800 text-lg">How many...?</h4>
+              <p class="text-xs text-emerald-600 font-lexend mt-1">Counting objects 1 to 20!</p>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <button onclick="switchTab('tab-objects')" class="btn-bounce bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold text-xl px-8 py-4 rounded-2xl border-b-4 border-amber-600 shadow-lg flex items-center gap-3 mx-auto">
+              <span>Start Learning Now!</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2. CLASSROOM OBJECTS ================= -->
+    <section id="tab-objects" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-sky-300 card-shadow">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <div>
+            <span class="bg-sky-100 text-sky-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 2</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-sky-700">CLASSROOM OBJECTS</h2>
+            <p class="text-slate-600 font-lexend text-sm">Look around your classroom! What things can you see?</p>
+          </div>
+          <button onclick="speakAllObjects()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2 rounded-xl border-b-4 border-sky-700 text-sm flex items-center gap-2">
+            <i class="fas fa-volume-up"></i> Listen All
+          </button>
+        </div>
+
+        <!-- Translation Toggle -->
+        <div class="flex items-center justify-end mb-4 gap-2">
+          <span class="text-xs font-bold text-slate-500">Show Indonesian Translation:</span>
+          <button id="transToggleBtn" onclick="toggleTranslation()" class="bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1 rounded-lg border border-slate-300">ON</button>
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="objectsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <!-- Dynamically populated or rendered -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. WHAT IS THAT? GRAMMAR ================= -->
+    <section id="tab-grammar" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-purple-300 card-shadow">
+        <span class="bg-purple-100 text-purple-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 3 & 4</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-purple-700 mt-1">WHAT IS THAT?</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-6">We use <span class="bg-purple-100 font-bold text-purple-800 px-2 py-0.5 rounded">What is that?</span> to ask about one thing that is further away.</p>
+
+        <!-- Rule Card -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-purple-900 text-lg mb-3 flex items-center gap-2">
+                <i class="fas fa-lightbulb text-amber-500"></i> Grammar Key
+              </h3>
+              <div class="space-y-2 text-slate-700 font-lexend">
+                <p class="flex items-center gap-2"><span class="bg-purple-200 text-purple-900 font-bold px-2 py-1 rounded">What</span> = Apa</p>
+                <p class="flex items-center gap-2"><span class="bg-purple-200 text-purple-900 font-bold px-2 py-1 rounded">That</span> = Itu</p>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-purple-200">
+              <p class="text-xs text-purple-700 font-bold">Question Formula:</p>
+              <p class="text-lg font-bold text-purple-900">What is that?</p>
+              <p class="text-xs text-purple-700 font-bold mt-2">Answer Formula:</p>
+              <p class="text-lg font-bold text-purple-900">That is a [object].</p>
+            </div>
+          </div>
+
+          <!-- Interactive pointing demo -->
+          <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 flex flex-col items-center justify-center text-center">
+            <div class="text-5xl mb-3 animate-pulse">👉 📦</div>
+            <p class="text-amber-900 font-bold text-xl">"What is that?"</p>
+            <p class="text-amber-700 text-sm font-lexend mt-1">"That is a bag."</p>
+            <button onclick="speak('What is that? That is a bag.')" class="mt-4 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-4 py-2 rounded-xl text-sm border-b-2 border-amber-600">
+              <i class="fas fa-volume-up"></i> Listen Example
+            </button>
+          </div>
+        </div>
+
+        <!-- Sentence Practice -->
+        <h3 class="text-xl font-bold text-slate-800 mb-4">🗣️ Let's Practice Saying The Sentences!</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="practiceSentencesGrid">
+          <!-- JS populated practice cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4. A OR AN? ================= -->
+    <section id="tab-a-an" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-emerald-300 card-shadow">
+        <span class="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 5</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1">WHEN TO USE A OR AN?</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-6">We use <span class="font-bold text-emerald-800">A</span> or <span class="font-bold text-emerald-800">AN</span> before ONE single thing!</p>
+
+        <!-- Visual Explanation -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <!-- USE A -->
+          <div class="bg-emerald-50 border-3 border-emerald-300 rounded-2xl p-6 relative">
+            <div class="absolute top-3 right-3 text-3xl">🅰️</div>
+            <h3 class="text-2xl font-black text-emerald-800 mb-2">Use "A"</h3>
+            <p class="text-sm text-emerald-700 font-lexend mb-4">When the word starts with a consonant sound (p, b, r, s, t, c...)</p>
+
+            <div class="space-y-3">
+              <div class="bg-white p-3 rounded-xl border border-emerald-200 flex items-center gap-3 cursor-pointer hover:bg-emerald-100 transition-colors" onclick="speak('A pencil')">
+                <span class="text-2xl">✏️</span>
+                <div>
+                  <span class="text-lg font-bold text-emerald-900"><span class="text-red-500 font-black">A</span> pencil</span>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-emerald-200 flex items-center gap-3 cursor-pointer hover:bg-emerald-100 transition-colors" onclick="speak('A book')">
+                <span class="text-2xl">📚</span>
+                <div>
+                  <span class="text-lg font-bold text-emerald-900"><span class="text-red-500 font-black">A</span> book</span>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-emerald-200 flex items-center gap-3 cursor-pointer hover:bg-emerald-100 transition-colors" onclick="speak('A ruler')">
+                <span class="text-2xl">📏</span>
+                <div>
+                  <span class="text-lg font-bold text-emerald-900"><span class="text-red-500 font-black">A</span> ruler</span>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-emerald-200 flex items-center gap-3 cursor-pointer hover:bg-emerald-100 transition-colors" onclick="speak('A bag')">
+                <span class="text-2xl">🎒</span>
+                <div>
+                  <span class="text-lg font-bold text-emerald-900"><span class="text-red-500 font-black">A</span> bag</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- USE AN -->
+          <div class="bg-orange-50 border-3 border-orange-300 rounded-2xl p-6 relative">
+            <div class="absolute top-3 right-3 text-3xl">🔤</div>
+            <h3 class="text-2xl font-black text-orange-800 mb-2">Use "AN"</h3>
+            <p class="text-sm text-orange-700 font-lexend mb-4">When the word starts with a vowel sound (A, E, I, O, U)</p>
+
+            <div class="space-y-3">
+              <div class="bg-white p-3 rounded-xl border border-orange-200 flex items-center gap-3 cursor-pointer hover:bg-orange-100 transition-colors" onclick="speak('An eraser')">
+                <span class="text-2xl">🧹</span>
+                <div>
+                  <span class="text-lg font-bold text-orange-900"><span class="text-purple-600 font-black">AN</span> eraser</span>
+                  <p class="text-xs text-orange-600">Eraser starts with 'E'!</p>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-orange-200 flex items-center gap-3 cursor-pointer hover:bg-orange-100 transition-colors" onclick="speak('An apple')">
+                <span class="text-2xl">🍎</span>
+                <div>
+                  <span class="text-lg font-bold text-orange-900"><span class="text-purple-600 font-black">AN</span> apple</span>
+                  <p class="text-xs text-orange-600">Apple starts with 'A'!</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Golden Rule Box -->
+            <div class="mt-6 bg-amber-200 border-2 border-amber-400 p-3 rounded-xl text-center">
+              <p class="text-xs font-bold text-amber-900">💡 GOLDEN REMINDER</p>
+              <p class="text-sm font-black text-amber-950 mt-0.5">A pencil, BUT AN eraser!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive A or AN Quick Sorter Game -->
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-5">
+          <h3 class="font-bold text-slate-800 text-lg mb-3">⚡ Quick Test: Choose A or AN!</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="aAnQuizGrid">
+            <!-- JS dynamic content -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. COLORS ================= -->
+    <section id="tab-colors" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-pink-300 card-shadow">
+        <span class="bg-pink-100 text-pink-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 6, 7 & 8</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-pink-700 mt-1">WHAT COLOR IS IT?</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-6">We use <span class="bg-pink-100 font-bold text-pink-900 px-2 py-0.5 rounded">What color is it?</span> to ask about colors!</p>
+
+        <!-- Colors Grid -->
+        <h3 class="font-bold text-slate-800 text-lg mb-3">🎨 Learn the 10 Colors:</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8" id="colorsGrid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Color QA Examples -->
+        <h3 class="font-bold text-slate-800 text-lg mb-3">❓ Color Questions & Answers:</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="colorQAGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6. NUMBERS 1-20 ================= -->
+    <section id="tab-numbers" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-amber-300 card-shadow">
+        <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 9, 10 & 11</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-amber-700 mt-1">HOW MANY? (NUMBERS 1 - 20)</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-4">We use <span class="bg-amber-100 font-bold text-amber-900 px-2 py-0.5 rounded">How many ...?</span> to ask about the number of things.</p>
+
+        <!-- Numbers 1-20 Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-8" id="numbersGrid">
+          <!-- JS generated numbers 1 to 20 -->
+        </div>
+
+        <!-- Plural Rule Explanation (-s) -->
+        <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 mb-8">
+          <h3 class="font-black text-amber-900 text-xl mb-2">⭐ Special Plural Rule: Add "-s"!</h3>
+          <p class="text-sm text-amber-800 font-lexend mb-4">When there is <strong>more than one</strong> thing, add an <span class="bg-red-500 text-white font-black px-2 py-0.5 rounded">-s</span> at the end!</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center font-bold">
+            <div class="bg-white p-3 rounded-xl border border-amber-200">
+              <p class="text-2xl mb-1">✏️</p>
+              <p class="text-slate-700 text-sm">1 Pencil</p>
+              <p class="text-amber-800 text-xs">One pencil</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-amber-200">
+              <p class="text-2xl mb-1">✏️✏️</p>
+              <p class="text-slate-700 text-sm">2 Pencil<span class="text-red-500 font-black">s</span></p>
+              <p class="text-amber-800 text-xs">Two pencils</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-amber-200">
+              <p class="text-2xl mb-1">✏️✏️✏️</p>
+              <p class="text-slate-700 text-sm">3 Pencil<span class="text-red-500 font-black">s</span></p>
+              <p class="text-amber-800 text-xs">Three pencils</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- How many practice -->
+        <h3 class="font-bold text-slate-800 text-lg mb-3">👀 Look and Count:</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="countingPracticeGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. LET'S COMBINE ================= -->
+    <section id="tab-combine" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-indigo-300 card-shadow">
+        <span class="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 12</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-indigo-700 mt-1">LET'S COMBINE ALL THREE!</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-6">Now, let's use all three questions together for full sentences!</p>
+
+        <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 max-w-2xl mx-auto shadow-sm">
+          <div class="flex items-center gap-4 mb-6 pb-4 border-b border-indigo-200">
+            <div id="combineObjectSvg" class="w-24 h-24 bg-white rounded-2xl border-2 border-indigo-300 p-2 flex items-center justify-center shrink-0">
+              <!-- SVG preview -->
+            </div>
+            <div>
+              <span class="bg-amber-400 text-amber-950 font-bold px-3 py-0.5 rounded-full text-xs">Active Object</span>
+              <h3 id="combineObjectName" class="text-2xl font-black text-indigo-900 mt-1">Three Yellow Pencils</h3>
+              <p class="text-xs text-indigo-700 font-lexend">Click buttons below to switch objects!</p>
+            </div>
+          </div>
+
+          <!-- 3 Questions Block -->
+          <div class="space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-indigo-200">
+              <span class="text-xs font-bold text-indigo-500">QUESTION 1: OBJECT</span>
+              <p class="text-slate-800 font-bold text-lg">Student A: "What is that?"</p>
+              <p id="combineA1" class="text-emerald-700 font-extrabold text-xl mt-1">Student B: "That is a pencil."</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-indigo-200">
+              <span class="text-xs font-bold text-pink-500">QUESTION 2: COLOR</span>
+              <p class="text-slate-800 font-bold text-lg">Student A: "What color is it?"</p>
+              <p id="combineA2" class="text-pink-700 font-extrabold text-xl mt-1">Student B: "It is yellow."</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-indigo-200">
+              <span class="text-xs font-bold text-amber-500">QUESTION 3: NUMBER</span>
+              <p class="text-slate-800 font-bold text-lg">Student A: "How many pencils are there?"</p>
+              <p id="combineA3" class="text-amber-700 font-extrabold text-xl mt-1">Student B: "There are three pencils."</p>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="mt-6 flex flex-wrap gap-2 justify-center">
+            <button onclick="setCombineObject('pencil')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-sm">✏️ Pencil</button>
+            <button onclick="setCombineObject('book')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-sm">📚 Book</button>
+            <button onclick="setCombineObject('bag')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-sm">🎒 Bag</button>
+            <button onclick="setCombineObject('eraser')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-sm">🧹 Eraser</button>
+            <button onclick="speakCombineFull()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-black px-5 py-2 rounded-xl text-sm ml-2 border-b-2 border-amber-600">
+              🔊 Read All
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 8. MINI DIALOGUE ================= -->
+    <section id="tab-dialogue" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-sky-300 card-shadow">
+        <span class="bg-sky-100 text-sky-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 13</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-sky-700 mt-1">MINI DIALOGUE ROLEPLAY</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-6">Let's practice speaking with your friend!</p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Control Panel -->
+          <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-5 space-y-4">
+            <h3 class="font-bold text-slate-800 text-lg border-b pb-2">⚙️ Dialogue Customizer</h3>
+            
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Choose Object:</label>
+              <select id="dialogueObj" onchange="updateDialogue()" class="w-full bg-white border-2 border-slate-300 rounded-xl p-2 font-bold text-slate-700">
+                <option value="book">Book (Buku)</option>
+                <option value="pencil">Pencil (Pensil)</option>
+                <option value="ruler">Ruler (Penggaris)</option>
+                <option value="bag">Bag (Tas)</option>
+                <option value="chair">Chair (Kursi)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Choose Color:</label>
+              <select id="dialogueCol" onchange="updateDialogue()" class="w-full bg-white border-2 border-slate-300 rounded-xl p-2 font-bold text-slate-700">
+                <option value="blue">Blue (Biru)</option>
+                <option value="yellow">Yellow (Kuning)</option>
+                <option value="red">Red (Merah)</option>
+                <option value="green">Green (Hijau)</option>
+                <option value="pink">Pink (Merah Muda)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Choose Quantity:</label>
+              <select id="dialogueNum" onchange="updateDialogue()" class="w-full bg-white border-2 border-slate-300 rounded-xl p-2 font-bold text-slate-700">
+                <option value="1">1 (One)</option>
+                <option value="2" selected>2 (Two)</option>
+                <option value="3">3 (Three)</option>
+                <option value="4">4 (Four)</option>
+                <option value="5">5 (Five)</option>
+              </select>
+            </div>
+
+            <button onclick="playFullDialogue()" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-extrabold py-3 rounded-xl border-b-4 border-sky-700 flex items-center justify-center gap-2">
+              <i class="fas fa-play"></i> Play Full Dialogue Voice
+            </button>
+          </div>
+
+          <!-- Visual Dialogue Speech Bubbles -->
+          <div class="lg:col-span-2 bg-gradient-to-b from-sky-50 to-indigo-50 border-2 border-sky-200 rounded-2xl p-6 space-y-6">
+            
+            <!-- Student A Line 1 -->
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-full bg-sky-400 text-white flex items-center justify-center text-2xl font-bold shrink-0 border-2 border-white shadow">👦</div>
+              <div class="talk-bubble talk-bubble-left p-4 border border-sky-200 shadow-sm w-full cursor-pointer hover:bg-sky-50" onclick="speak('Student A says: What is that?')">
+                <span class="text-xs font-bold text-sky-600">Student A (Leo):</span>
+                <p class="text-lg font-bold text-slate-800">"What is that?"</p>
+              </div>
+            </div>
+
+            <!-- Student B Line 1 -->
+            <div class="flex items-start gap-3 flex-row-reverse">
+              <div class="w-12 h-12 rounded-full bg-pink-400 text-white flex items-center justify-center text-2xl font-bold shrink-0 border-2 border-white shadow">👧</div>
+              <div class="talk-bubble talk-bubble-right p-4 border border-pink-200 shadow-sm w-full cursor-pointer hover:bg-pink-50 text-right" onclick="speak('Student B says: ' + document.getElementById('dlgResp1').innerText)">
+                <span class="text-xs font-bold text-pink-600">Student B (Maya):</span>
+                <p id="dlgResp1" class="text-lg font-bold text-slate-800">"That is a book."</p>
+              </div>
+            </div>
+
+            <!-- Student A Line 2 -->
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-full bg-sky-400 text-white flex items-center justify-center text-2xl font-bold shrink-0 border-2 border-white shadow">👦</div>
+              <div class="talk-bubble talk-bubble-left p-4 border border-sky-200 shadow-sm w-full cursor-pointer hover:bg-sky-50" onclick="speak('Student A says: What color is it?')">
+                <span class="text-xs font-bold text-sky-600">Student A (Leo):</span>
+                <p class="text-lg font-bold text-slate-800">"What color is it?"</p>
+              </div>
+            </div>
+
+            <!-- Student B Line 2 -->
+            <div class="flex items-start gap-3 flex-row-reverse">
+              <div class="w-12 h-12 rounded-full bg-pink-400 text-white flex items-center justify-center text-2xl font-bold shrink-0 border-2 border-white shadow">👧</div>
+              <div class="talk-bubble talk-bubble-right p-4 border border-pink-200 shadow-sm w-full cursor-pointer hover:bg-pink-50 text-right" onclick="speak('Student B says: ' + document.getElementById('dlgResp2').innerText)">
+                <span class="text-xs font-bold text-pink-600">Student B (Maya):</span>
+                <p id="dlgResp2" class="text-lg font-bold text-slate-800">"It is blue."</p>
+              </div>
+            </div>
+
+            <!-- Student A Line 3 -->
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-full bg-sky-400 text-white flex items-center justify-center text-2xl font-bold shrink-0 border-2 border-white shadow">👦</div>
+              <div class="talk-bubble talk-bubble-left p-4 border border-sky-200 shadow-sm w-full cursor-pointer hover:bg-sky-50" onclick="speak('Student A says: ' + document.getElementById('dlgReq3').innerText)">
+                <span class="text-xs font-bold text-sky-600">Student A (Leo):</span>
+                <p id="dlgReq3" class="text-lg font-bold text-slate-800">"How many books are there?"</p>
+              </div>
+            </div>
+
+            <!-- Student B Line 3 -->
+            <div class="flex items-start gap-3 flex-row-reverse">
+              <div class="w-12 h-12 rounded-full bg-pink-400 text-white flex items-center justify-center text-2xl font-bold shrink-0 border-2 border-white shadow">👧</div>
+              <div class="talk-bubble talk-bubble-right p-4 border border-pink-200 shadow-sm w-full cursor-pointer hover:bg-pink-50 text-right" onclick="speak('Student B says: ' + document.getElementById('dlgResp3').innerText)">
+                <span class="text-xs font-bold text-pink-600">Student B (Maya):</span>
+                <p id="dlgResp3" class="text-lg font-bold text-slate-800">"There are two books."</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 9. MINI GAMES ================= -->
+    <section id="tab-games" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-amber-400 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 14</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-amber-700">LET'S PLAY GAMES!</h2>
+            <p class="text-slate-600 font-lexend text-sm">Listen to the clues and guess the object!</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-slate-500 font-bold block">Game Stars:</span>
+            <span id="gameStars" class="text-2xl font-bold text-amber-500">⭐ 0</span>
+          </div>
+        </div>
+
+        <!-- Riddle Game Container -->
+        <div class="bg-amber-50 border-3 border-amber-300 rounded-2xl p-6 relative overflow-hidden">
+          <div class="max-w-xl mx-auto text-center space-y-6">
+            <div class="inline-block bg-white px-4 py-1 rounded-full border border-amber-200 text-xs font-bold text-amber-800">
+              Riddle <span id="riddleNum">1</span> of 4
+            </div>
+
+            <!-- Clue Bubble -->
+            <div class="bg-white p-6 rounded-2xl border-2 border-amber-300 shadow-sm relative cursor-pointer hover:bg-amber-50 transition-colors" onclick="speakClue()">
+              <div class="text-3xl mb-2">🕵️‍♂️ Clue:</div>
+              <p id="riddleClueText" class="text-xl sm:text-2xl font-bold text-slate-800">"It is yellow. You use it to write. What is that?"</p>
+              <button class="mt-3 text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-lg font-bold inline-flex items-center gap-1">
+                <i class="fas fa-volume-up"></i> Click to hear clue
+              </button>
+            </div>
+
+            <!-- Answer Options -->
+            <div id="riddleOptions" class="grid grid-cols-2 gap-4">
+              <!-- JS Generated Answer Buttons -->
+            </div>
+
+            <!-- Result Feedback -->
+            <div id="riddleFeedback" class="hidden p-4 rounded-xl text-center font-bold text-lg"></div>
+
+            <button id="nextRiddleBtn" onclick="nextRiddle()" class="hidden bg-amber-400 hover:bg-amber-500 text-amber-950 font-black px-6 py-3 rounded-xl border-b-4 border-amber-600 mx-auto">
+              Next Riddle <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 10. QUIZ ASSESSMENT ================= -->
+    <section id="tab-quiz" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-purple-400 card-shadow">
+        <div class="flex justify-between items-center mb-6 border-b pb-4">
+          <div>
+            <span class="bg-purple-100 text-purple-800 font-bold px-3 py-1 rounded-full text-xs">ASSESSMENT</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-purple-800">CLASSROOM KNOWLEDGE QUIZ</h2>
+            <p class="text-slate-600 font-lexend text-sm">Test what you learned today!</p>
+          </div>
+          <div class="bg-purple-50 border border-purple-200 px-4 py-2 rounded-xl text-center">
+            <span class="text-xs text-purple-600 font-bold block">Score</span>
+            <span id="quizScoreText" class="text-2xl font-black text-purple-900">0 / 10</span>
+          </div>
+        </div>
+
+        <!-- Quiz Progress Bar -->
+        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-6">
+          <div id="quizProgressBar" class="bg-purple-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+
+        <!-- Question Card -->
+        <div id="quizCard" class="space-y-6">
+          <div class="bg-purple-50 border-2 border-purple-200 p-6 rounded-2xl">
+            <span id="qNumber" class="text-xs font-bold text-purple-600 uppercase tracking-wider block mb-1">Question 1</span>
+            <h3 id="qText" class="text-xl sm:text-2xl font-extrabold text-slate-800">What is the English word for 'Penggaris'?</h3>
+            
+            <!-- SVG or Emoji visual for question if applicable -->
+            <div id="qVisual" class="mt-4 flex justify-center"></div>
+          </div>
+
+          <div id="qOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Dynamic option buttons -->
+          </div>
+        </div>
+
+        <!-- Quiz Complete Modal Block -->
+        <div id="quizResult" class="hidden text-center py-8 space-y-6">
+          <div class="text-6xl animate-bounce">🏆</div>
+          <h3 class="text-3xl font-black text-purple-900">GREAT JOB! QUIZ COMPLETED!</h3>
+          <p class="text-lg text-slate-600 font-lexend">You got <span id="finalScore" class="font-bold text-purple-700">10</span> out of 10 correct!</p>
+          <div class="flex justify-center gap-2 text-3xl" id="finalStars"> ⭐⭐⭐⭐⭐ </div>
+          <button onclick="restartQuiz()" class="bg-purple-600 hover:bg-purple-700 text-white font-extrabold px-8 py-3 rounded-2xl border-b-4 border-purple-800">
+            <i class="fas fa-redo"></i> Try Quiz Again
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 11. REFLECTION & HOMEWORK ================= -->
+    <section id="tab-reflection" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border-4 border-emerald-300 card-shadow">
+        <span class="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-xs">SECTION 15</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1">GREAT JOB! REFLECTION & HOMEWORK</h2>
+        <p class="text-slate-600 font-lexend text-sm mb-6">Let's review what we have learned and make our homework sheet!</p>
+
+        <!-- Summary Recap -->
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-5 mb-8">
+          <h3 class="font-bold text-emerald-900 text-lg mb-3">✅ Today We Have Learned:</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl border border-emerald-200">
+              <span class="text-2xl mb-1 block">1️⃣</span>
+              <p class="font-bold text-slate-800">What is that?</p>
+              <p class="text-xs text-slate-500 mt-1">That is a pencil.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-emerald-200">
+              <span class="text-2xl mb-1 block">2️⃣</span>
+              <p class="font-bold text-slate-800">What color is it?</p>
+              <p class="text-xs text-slate-500 mt-1">It is yellow.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-emerald-200">
+              <span class="text-2xl mb-1 block">3️⃣</span>
+              <p class="font-bold text-slate-800">How many pencils?</p>
+              <p class="text-xs text-slate-500 mt-1">There are three pencils.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Mood Reflection -->
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 mb-8 text-center">
+          <h3 class="font-bold text-amber-900 text-lg mb-2">How do you feel about today's lesson?</h3>
+          <div class="flex justify-center gap-4 text-4xl my-3">
+            <button onclick="setMood('😍 Super Happy!')" class="hover:scale-125 transition-transform">😍</button>
+            <button onclick="setMood('😃 Happy!')" class="hover:scale-125 transition-transform">😃</button>
+            <button onclick="setMood('😐 Okay')" class="hover:scale-125 transition-transform">😐</button>
+          </div>
+          <p id="moodFeedback" class="text-sm font-bold text-amber-800 mt-2">Click an emoji!</p>
+        </div>
+
+        <!-- Printable / Interactive Homework Generator -->
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b pb-3">
+            <div>
+              <h3 class="font-bold text-slate-800 text-xl">📝 HOMEWORK BUILDER</h3>
+              <p class="text-xs text-slate-500 font-lexend">Find 5 things in your classroom or at home and fill in!</p>
+            </div>
+            <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2">
+              <i class="fas fa-print"></i> Print Homework
+            </button>
+          </div>
+
+          <!-- Homework Table Form -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse font-lexend">
+              <thead>
+                <tr class="bg-amber-200 text-amber-900 text-sm">
+                  <th class="p-2.5 rounded-tl-xl">No.</th>
+                  <th class="p-2.5">Object Name (In English)</th>
+                  <th class="p-2.5">Its Color</th>
+                  <th class="p-2.5 rounded-tr-xl">How Many?</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm divide-y divide-slate-200 bg-white">
+                <tr>
+                  <td class="p-2.5 font-bold">1</td>
+                  <td class="p-2.5"><input type="text" value="Pencil" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" value="Yellow" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" value="Three pencils" class="w-full p-1.5 border rounded-lg"></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">2</td>
+                  <td class="p-2.5"><input type="text" value="Book" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" value="Blue" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" value="Two books" class="w-full p-1.5 border rounded-lg"></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">3</td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Eraser" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Pink" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. One eraser" class="w-full p-1.5 border rounded-lg"></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">4</td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Bag" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Red" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Four bags" class="w-full p-1.5 border rounded-lg"></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">5</td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Ruler" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Green" class="w-full p-1.5 border rounded-lg"></td>
+                  <td class="p-2.5"><input type="text" placeholder="e.g. Five rulers" class="w-full p-1.5 border rounded-lg"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // --- GLOBAL DATA & STATE ---
+    let soundEnabled = true;
+    let showTranslation = true;
+    let stars = 0;
+
+    // Objects list
+    const classroomObjects = [
+      { id: 'pencil', en: 'Pencil', idn: 'Pensil', article: 'a', icon: '✏️', svg: createPencilSvg('#eab308') },
+      { id: 'book', en: 'Book', idn: 'Buku', article: 'a', icon: '📚', svg: createBookSvg('#3b82f6') },
+      { id: 'ruler', en: 'Ruler', idn: 'Penggaris', article: 'a', icon: '📏', svg: createRulerSvg('#22c55e') },
+      { id: 'eraser', en: 'Eraser', idn: 'Penghapus', article: 'an', icon: '🧹', svg: createEraserSvg('#ec4899') },
+      { id: 'bag', en: 'Bag', idn: 'Tas', article: 'a', icon: '🎒', svg: createBagSvg('#ef4444') },
+      { id: 'chair', en: 'Chair', idn: 'Kursi', article: 'a', icon: '🪑', svg: createChairSvg('#a855f7') },
+      { id: 'table', en: 'Table', idn: 'Meja', article: 'a', icon: '🪑', svg: createTableSvg('#84cc16') },
+      { id: 'board', en: 'Board', idn: 'Papan tulis', article: 'a', icon: '🪧', svg: createBoardSvg('#14b8a6') },
+      { id: 'notebook', en: 'Notebook', idn: 'Buku catatan', article: 'a', icon: '📓', svg: createNotebookSvg('#f97316') },
+      { id: 'sharpener', en: 'Sharpener', idn: 'Rautan', article: 'a', icon: '⚙️', svg: createSharpenerSvg('#06b6d4') }
+    ];
+
+    // Colors list
+    const colorsList = [
+      { en: 'Red', idn: 'Merah', hex: '#ef4444', text: 'text-white' },
+      { en: 'Blue', idn: 'Biru', hex: '#3b82f6', text: 'text-white' },
+      { en: 'Yellow', idn: 'Kuning', hex: '#eab308', text: 'text-slate-900' },
+      { en: 'Green', idn: 'Hijau', hex: '#22c55e', text: 'text-white' },
+      { en: 'Pink', idn: 'Merah muda', hex: '#ec4899', text: 'text-white' },
+      { en: 'Purple', idn: 'Ungu', hex: '#a855f7', text: 'text-white' },
+      { en: 'Orange', idn: 'Oranye', hex: '#f97316', text: 'text-white' },
+      { en: 'Black', idn: 'Hitam', hex: '#1e293b', text: 'text-white' },
+      { en: 'White', idn: 'Putih', hex: '#ffffff', text: 'text-slate-900 border-2 border-slate-300' },
+      { en: 'Brown', idn: 'Cokelat', hex: '#78350f', text: 'text-white' }
+    ];
+
+    // Numbers 1-20
+    const numbersList = [
+      { num: 1, word: 'One' }, { num: 2, word: 'Two' }, { num: 3, word: 'Three' }, { num: 4, word: 'Four' },
+      { num: 5, word: 'Five' }, { num: 6, word: 'Six' }, { num: 7, word: 'Seven' }, { num: 8, word: 'Eight' },
+      { num: 9, word: 'Nine' }, { num: 10, word: 'Ten' }, { num: 11, word: 'Eleven' }, { num: 12, word: 'Twelve' },
+      { num: 13, word: 'Thirteen' }, { num: 14, word: 'Fourteen' }, { num: 15, word: 'Fifteen' }, { num: 16, word: 'Sixteen' },
+      { num: 17, word: 'Seventeen' }, { num: 18, word: 'Eighteen' }, { num: 19, word: 'Nineteen' }, { num: 20, word: 'Twenty' }
+    ];
+
+    // Riddles for Game
+    const riddles = [
+      {
+        clue: "It is yellow. You use it to write. What is that?",
+        options: ["Pencil", "Ruler", "Bag", "Eraser"],
+        answer: "Pencil",
+        icon: "✏️"
+      },
+      {
+        clue: "It is used to erase pencil marks. What is that?",
+        options: ["Book", "Eraser", "Chair", "Table"],
+        answer: "Eraser",
+        icon: "🧹"
+      },
+      {
+        clue: "You use it to measure lines. What is that?",
+        options: ["Notebook", "Board", "Ruler", "Sharpener"],
+        answer: "Ruler",
+        icon: "📏"
+      },
+      {
+        clue: "You put your books and pencils in it. What is that?",
+        options: ["Bag", "Chair", "Board", "Pencil"],
+        answer: "Bag",
+        icon: "🎒"
+      }
+    ];
+    let currentRiddleIndex = 0;
+
+    // Quiz Questions Data
+    const quizQuestions = [
+      {
+        q: "What is the English word for 'Penggaris'?",
+        options: ["Book", "Ruler", "Eraser", "Sharpener"],
+        answer: "Ruler"
+      },
+      {
+        q: "Which word requires 'AN' before it?",
+        options: ["Pencil", "Book", "Eraser", "Bag"],
+        answer: "Eraser"
+      },
+      {
+        q: "Complete the sentence: 'What _____ that?'",
+        options: ["are", "is", "am", "do"],
+        answer: "is"
+      },
+      {
+        q: "What color is the sky on a sunny day?",
+        options: ["Red", "Green", "Blue", "Black"],
+        answer: "Blue"
+      },
+      {
+        q: "If you have 1 pencil and get 2 more, how many pencils?",
+        options: ["Two pencils", "Three pencils", "Four pencils", "Five pencils"],
+        answer: "Three pencils"
+      },
+      {
+        q: "What is the English word for 'Buku Catatan'?",
+        options: ["Notebook", "Board", "Table", "Chair"],
+        answer: "Notebook"
+      },
+      {
+        q: "Choose the correct sentence:",
+        options: ["That is a eraser.", "That is an eraser.", "That are an eraser.", "That is an pencil."],
+        answer: "That is an eraser."
+      },
+      {
+        q: "How many books are here? 📚📚📚📚",
+        options: ["Three books", "Four books", "Five books", "Six books"],
+        answer: "Four books"
+      },
+      {
+        q: "What color is 'Merah Muda' in English?",
+        options: ["Purple", "Pink", "Orange", "Yellow"],
+        answer: "Pink"
+      },
+      {
+        q: "When there are 3 pencils, we add '-s' to make:",
+        options: ["Penciles", "Pencils", "Pencilss", "Pencil"],
+        answer: "Pencils"
+      }
+    ];
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+
+    // --- AUDIO & SPEECH SYNTHESIS ---
+    function speak(text) {
+      if (!soundEnabled) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85; // Slower pace for 3rd graders
+        utterance.pitch = 1.1; // Friendly tone
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function toggleAudio() {
+      soundEnabled = !soundEnabled;
+      const label = document.getElementById('soundLabel');
+      const btn = document.getElementById('soundToggleBtn');
+      if (soundEnabled) {
+        label.innerText = 'Audio: ON';
+        btn.className = 'bg-sky-100 text-sky-700 px-3 py-1.5 rounded-xl border-2 border-sky-300 font-semibold text-sm flex items-center gap-2 hover:bg-sky-200 transition-colors';
+        speak("Audio enabled");
+      } else {
+        label.innerText = 'Audio: OFF';
+        btn.className = 'bg-slate-200 text-slate-500 px-3 py-1.5 rounded-xl border-2 border-slate-300 font-semibold text-sm flex items-center gap-2';
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    // --- TAB NAVIGATION ---
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-amber-400', 'border-amber-400', 'text-amber-950');
+        btn.classList.add('bg-white', 'border-amber-200', 'text-slate-700');
+      });
+
+      const activeBtn = event ? event.currentTarget : null;
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-amber-400', 'border-amber-400', 'text-amber-950');
+        activeBtn.classList.remove('bg-white', 'border-amber-200', 'text-slate-700');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function addStars(num) {
+      stars += num;
+      document.getElementById('starScore').innerText = stars;
+      document.getElementById('gameStars').innerText = `⭐ ${stars}`;
+    }
+
+    // --- SVG GENERATORS FOR HIGH QUALITY ICONS ---
+    function createPencilSvg(color='#eab308') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="24" y="10" width="16" height="36" rx="2" fill="${color}"/>
+        <path d="M24 10H40V16H24V10Z" fill="#ec4899"/>
+        <path d="M24 16H40V18H24V16Z" fill="#cbd5e1"/>
+        <path d="M24 46L32 58L40 46H24Z" fill="#fde047"/>
+        <path d="M29 53.5L32 58L35 53.5H29Z" fill="#334155"/>
+      </svg>`;
+    }
+    function createBookSvg(color='#3b82f6') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="12" y="12" width="40" height="42" rx="4" fill="${color}"/>
+        <path d="M20 12V54" stroke="#ffffff" stroke-width="3"/>
+        <rect x="24" y="20" width="20" height="4" rx="2" fill="#ffffff"/>
+        <rect x="24" y="28" width="16" height="4" rx="2" fill="#ffffff" opacity="0.8"/>
+      </svg>`;
+    }
+    function createRulerSvg(color='#22c55e') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="8" y="24" width="48" height="18" rx="3" fill="${color}"/>
+        <path d="M14 24V32M20 24V29M26 24V32M32 24V29M38 24V32M44 24V29M50 24V32" stroke="#ffffff" stroke-width="2"/>
+      </svg>`;
+    }
+    function createEraserSvg(color='#ec4899') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <path d="M14 28L34 12L52 30L32 46L14 28Z" fill="${color}"/>
+        <path d="M32 46L52 30L44 48L24 48L32 46Z" fill="#3b82f6"/>
+        <path d="M14 28L32 46L24 48L8 32L14 28Z" fill="#e2e8f0"/>
+      </svg>`;
+    }
+    function createBagSvg(color='#ef4444') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <path d="M24 16C24 11.5817 27.5817 8 32 8C36.4183 8 40 11.5817 40 16" stroke="${color}" stroke-width="4"/>
+        <rect x="14" y="16" width="36" height="40" rx="8" fill="${color}"/>
+        <rect x="20" y="32" width="24" height="18" rx="4" fill="#ffffff" opacity="0.3"/>
+      </svg>`;
+    }
+    function createChairSvg(color='#a855f7') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="20" y="12" width="24" height="20" rx="3" fill="${color}"/>
+        <rect x="16" y="32" width="32" height="6" rx="2" fill="${color}"/>
+        <rect x="20" y="38" width="4" height="18" fill="#78350f"/>
+        <rect x="40" y="38" width="4" height="18" fill="#78350f"/>
+      </svg>`;
+    }
+    function createTableSvg(color='#84cc16') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="8" y="20" width="48" height="10" rx="3" fill="${color}"/>
+        <rect x="14" y="30" width="5" height="24" fill="#78350f"/>
+        <rect x="45" y="30" width="5" height="24" fill="#78350f"/>
+      </svg>`;
+    }
+    function createBoardSvg(color='#14b8a6') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="6" y="12" width="52" height="34" rx="3" fill="#78350f"/>
+        <rect x="10" y="16" width="44" height="26" fill="${color}"/>
+        <path d="M16 26H28" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
+    }
+    function createNotebookSvg(color='#f97316') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="18" y="10" width="34" height="44" rx="4" fill="${color}"/>
+        <circle cx="14" cy="18" r="2" fill="#475569"/>
+        <circle cx="14" cy="28" r="2" fill="#475569"/>
+        <circle cx="14" cy="38" r="2" fill="#475569"/>
+        <circle cx="14" cy="48" r="2" fill="#475569"/>
+      </svg>`;
+    }
+    function createSharpenerSvg(color='#06b6d4') {
+      return `<svg class="w-16 h-16" viewBox="0 0 64 64" fill="none">
+        <rect x="16" y="16" width="32" height="32" rx="6" fill="${color}"/>
+        <circle cx="32" cy="32" r="8" fill="#334155"/>
+      </svg>`;
+    }
+
+    // --- RENDER SECTION 2: CLASSROOM OBJECTS ---
+    function renderObjects() {
+      const grid = document.getElementById('objectsGrid');
+      grid.innerHTML = classroomObjects.map(obj => `
+        <div onclick="speak('${obj.en}')" class="bg-gradient-to-b from-slate-50 to-sky-50 border-2 border-sky-200 rounded-2xl p-4 flex flex-col items-center text-center cursor-pointer hover:scale-105 hover:border-sky-400 transition-all shadow-sm group">
+          <div class="mb-2 group-hover:rotate-6 transition-transform">
+            ${obj.svg}
+          </div>
+          <p class="font-extrabold text-slate-800 text-lg">${obj.en}</p>
+          ${showTranslation ? `<p class="text-xs font-bold text-sky-600 font-lexend mt-0.5">${obj.idn}</p>` : ''}
+          <span class="mt-2 text-xs bg-sky-200 text-sky-900 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+            <i class="fas fa-volume-up"></i> Listen
+          </span>
+        </div>
+      `).join('');
+    }
+
+    function toggleTranslation() {
+      showTranslation = !showTranslation;
+      document.getElementById('transToggleBtn').innerText = showTranslation ? 'ON' : 'OFF';
+      renderObjects();
+    }
+
+    function speakAllObjects() {
+      const text = classroomObjects.map(o => o.en).join(', ');
+      speak("Classroom objects: " + text);
+    }
+
+    // --- RENDER SECTION 3 & 4: PRACTICE SENTENCES ---
+    function renderPracticeSentences() {
+      const grid = document.getElementById('practiceSentencesGrid');
+      const practiceItems = [
+        { obj: 'book', text: 'That is a book.', idn: 'Itu adalah sebuah buku.' },
+        { obj: 'ruler', text: 'That is a ruler.', idn: 'Itu adalah sebuah penggaris.' },
+        { obj: 'eraser', text: 'That is an eraser.', idn: 'Itu adalah sebuah penghapus.' },
+        { obj: 'bag', text: 'That is a bag.', idn: 'Itu adalah sebuah tas.' },
+        { obj: 'chair', text: 'That is a chair.', idn: 'Itu adalah sebuah kursi.' },
+        { obj: 'pencil', text: 'That is a pencil.', idn: 'Itu adalah sebuah pensil.' }
+      ];
+
+      grid.innerHTML = practiceItems.map(item => `
+        <div onclick="speak('${item.text}')" class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 flex items-center gap-3 cursor-pointer hover:bg-purple-100 transition-colors">
+          <div class="text-3xl">💬</div>
+          <div>
+            <p class="font-bold text-purple-950 text-base">"${item.text}"</p>
+            <p class="text-xs text-purple-700 font-lexend mt-0.5">${item.idn}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- RENDER SECTION 5: A OR AN GAME ---
+    function renderAAnQuiz() {
+      const grid = document.getElementById('aAnQuizGrid');
+      const items = [
+        { name: 'Pencil', answer: 'a' },
+        { name: 'Eraser', answer: 'an' },
+        { name: 'Apple', answer: 'an' },
+        { name: 'Ruler', answer: 'a' },
+        { name: 'Bag', answer: 'a' },
+        { name: 'Notebook', answer: 'a' }
+      ];
+
+      grid.innerHTML = items.map((item, idx) => `
+        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+          <span class="font-bold text-slate-800">___ ${item.name}</span>
+          <div class="flex gap-1" id="aAnGroup-${idx}">
+            <button onclick="checkAAn(${idx}, 'a', '${item.answer}', '${item.name}')" class="bg-slate-100 hover:bg-emerald-200 text-slate-800 font-bold px-3 py-1 rounded-lg text-xs">A</button>
+            <button onclick="checkAAn(${idx}, 'an', '${item.answer}', '${item.name}')" class="bg-slate-100 hover:bg-orange-200 text-slate-800 font-bold px-3 py-1 rounded-lg text-xs">AN</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function checkAAn(idx, choice, correct, name) {
+      const container = document.getElementById(`aAnGroup-${idx}`);
+      if (choice === correct) {
+        speak(`Correct! ${correct.toUpperCase()} ${name}`);
+        container.innerHTML = `<span class="text-xs bg-emerald-100 text-emerald-800 font-black px-3 py-1 rounded-lg">✅ ${correct.toUpperCase()} ${name}</span>`;
+        addStars(1);
+      } else {
+        speak(`Try again! ${name} uses ${correct.toUpperCase()}`);
+        container.classList.add('animate-shake');
+        setTimeout(() => container.classList.remove('animate-shake'), 500);
+      }
+    }
+
+    // --- RENDER SECTION 6, 7 & 8: COLORS ---
+    function renderColors() {
+      const grid = document.getElementById('colorsGrid');
+      grid.innerHTML = colorsList.map(c => `
+        <div onclick="speak('${c.en}')" style="background-color: ${c.hex}" class="${c.text} rounded-2xl p-4 text-center cursor-pointer shadow-md hover:scale-105 transition-transform flex flex-col justify-center items-center h-24">
+          <p class="font-black text-lg leading-tight">${c.en}</p>
+          <p class="text-xs font-semibold opacity-90">${c.idn}</p>
+        </div>
+      `).join('');
+
+      const qaGrid = document.getElementById('colorQAGrid');
+      const qas = [
+        { q: "What color is the pencil?", a: "It is yellow.", color: "#eab308" },
+        { q: "What color is the book?", a: "It is blue.", color: "#3b82f6" },
+        { q: "What color is the bag?", a: "It is red.", color: "#ef4444" },
+        { q: "What color is the ruler?", a: "It is green.", color: "#22c55e" }
+      ];
+
+      qaGrid.innerHTML = qas.map(qa => `
+        <div onclick="speak('${qa.q} ${qa.a}')" class="bg-pink-50 border-2 border-pink-200 rounded-2xl p-4 flex items-center gap-3 cursor-pointer hover:bg-pink-100 transition-colors">
+          <div class="w-8 h-8 rounded-full shrink-0 border-2 border-white shadow-sm" style="background-color: ${qa.color}"></div>
+          <div>
+            <p class="text-xs font-bold text-pink-700">Q: "${qa.q}"</p>
+            <p class="text-base font-extrabold text-slate-800">A: "${qa.a}"</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- RENDER SECTION 9, 10 & 11: NUMBERS ---
+    function renderNumbers() {
+      const grid = document.getElementById('numbersGrid');
+      grid.innerHTML = numbersList.map(n => `
+        <div onclick="speak('${n.word}')" class="bg-gradient-to-b from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-3 text-center cursor-pointer hover:scale-105 transition-transform">
+          <span class="text-2xl font-black text-amber-600">${n.num}</span>
+          <p class="font-bold text-slate-800 text-sm mt-0.5">${n.word}</p>
+        </div>
+      `).join('');
+
+      const countGrid = document.getElementById('countingPracticeGrid');
+      const countPractices = [
+        { q: "How many pencils are there?", a: "There are three pencils.", items: "✏️✏️✏️" },
+        { q: "How many books are there?", a: "There are two books.", items: "📚📚" },
+        { q: "How many erasers are there?", a: "There are four erasers.", items: "🧹🧹🧹🧹" }
+      ];
+
+      countGrid.innerHTML = countPractices.map(c => `
+        <div onclick="speak('${c.q} ${c.a}')" class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-center cursor-pointer hover:bg-amber-100 transition-colors">
+          <div class="text-3xl mb-2">${c.items}</div>
+          <p class="text-xs font-bold text-amber-800">${c.q}</p>
+          <p class="text-base font-black text-slate-800 mt-1">"${c.a}"</p>
+        </div>
+      `).join('');
+    }
+
+    // --- COMBINE SECTION ---
+    function setCombineObject(type) {
+      const objName = document.getElementById('combineObjectName');
+      const svgBox = document.getElementById('combineObjectSvg');
+      const a1 = document.getElementById('combineA1');
+      const a2 = document.getElementById('combineA2');
+      const a3 = document.getElementById('combineA3');
+
+      if (type === 'pencil') {
+        objName.innerText = "Three Yellow Pencils";
+        svgBox.innerHTML = createPencilSvg('#eab308');
+        a1.innerText = 'Student B: "That is a pencil."';
+        a2.innerText = 'Student B: "It is yellow."';
+        a3.innerText = 'Student B: "There are three pencils."';
+      } else if (type === 'book') {
+        objName.innerText = "Two Blue Books";
+        svgBox.innerHTML = createBookSvg('#3b82f6');
+        a1.innerText = 'Student B: "That is a book."';
+        a2.innerText = 'Student B: "It is blue."';
+        a3.innerText = 'Student B: "There are two books."';
+      } else if (type === 'bag') {
+        objName.innerText = "One Red Bag";
+        svgBox.innerHTML = createBagSvg('#ef4444');
+        a1.innerText = 'Student B: "That is a bag."';
+        a2.innerText = 'Student B: "It is red."';
+        a3.innerText = 'Student B: "There is one bag."';
+      } else if (type === 'eraser') {
+        objName.innerText = "Four Pink Erasers";
+        svgBox.innerHTML = createEraserSvg('#ec4899');
+        a1.innerText = 'Student B: "That is an eraser."';
+        a2.innerText = 'Student B: "It is pink."';
+        a3.innerText = 'Student B: "There are four erasers."';
+      }
+    }
+
+    function speakCombineFull() {
+      const a1 = document.getElementById('combineA1').innerText;
+      const a2 = document.getElementById('combineA2').innerText;
+      const a3 = document.getElementById('combineA3').innerText;
+      speak(`Question 1: What is that? ${a1}. Question 2: What color is it? ${a2}. Question 3: How many? ${a3}`);
+    }
+
+    // --- MINI DIALOGUE LOGIC ---
+    function updateDialogue() {
+      const obj = document.getElementById('dialogueObj').value;
+      const col = document.getElementById('dialogueCol').value;
+      const num = document.getElementById('dialogueNum').value;
+
+      const article = obj === 'eraser' ? 'an' : 'a';
+      document.getElementById('dlgResp1').innerText = `"That is ${article} ${obj}."`;
+      document.getElementById('dlgResp2').innerText = `"It is ${col}."`;
+
+      const numWord = numbersList.find(n => n.num == num).word.toLowerCase();
+      const pluralObj = num > 1 ? `${obj}s` : obj;
+      
+      document.getElementById('dlgReq3').innerText = `"How many ${pluralObj} are there?"`;
+      document.getElementById('dlgResp3').innerText = num == 1 ? `"There is one ${obj}."` : `"There are ${numWord} ${pluralObj}."`;
+    }
+
+    function playFullDialogue() {
+      const r1 = document.getElementById('dlgResp1').innerText;
+      const r2 = document.getElementById('dlgResp2').innerText;
+      const q3 = document.getElementById('dlgReq3').innerText;
+      const r3 = document.getElementById('dlgResp3').innerText;
+
+      speak(`Leo asks: What is that? Maya says: ${r1}. Leo asks: What color is it? Maya says: ${r2}. Leo asks: ${q3}. Maya says: ${r3}.`);
+    }
+
+    // --- MINI GAME: RIDDLES ---
+    function loadRiddle() {
+      const r = riddles[currentRiddleIndex];
+      document.getElementById('riddleNum').innerText = currentRiddleIndex + 1;
+      document.getElementById('riddleClueText').innerText = `"${r.clue}"`;
+      document.getElementById('riddleFeedback').className = 'hidden';
+      document.getElementById('nextRiddleBtn').classList.add('hidden');
+
+      const optionsBox = document.getElementById('riddleOptions');
+      optionsBox.innerHTML = r.options.map(opt => `
+        <button onclick="checkRiddle('${opt}')" class="bg-white hover:bg-amber-100 text-slate-800 font-extrabold p-4 rounded-xl border-2 border-amber-300 text-lg shadow-sm transition-all flex items-center justify-center gap-2">
+          <span>${opt}</span>
+        </button>
+      `).join('');
+    }
+
+    function speakClue() {
+      speak(riddles[currentRiddleIndex].clue);
+    }
+
+    function checkRiddle(chosen) {
+      const r = riddles[currentRiddleIndex];
+      const feedback = document.getElementById('riddleFeedback');
+      feedback.classList.remove('hidden');
+
+      if (chosen === r.answer) {
+        feedback.className = 'p-4 rounded-xl text-center font-bold text-lg bg-emerald-100 text-emerald-800 border-2 border-emerald-300';
+        feedback.innerText = `🎉 Correct! That is a ${r.answer}! (+10 Stars)`;
+        speak(`Correct! That is a ${r.answer}!`);
+        addStars(10);
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+        document.getElementById('nextRiddleBtn').classList.remove('hidden');
+      } else {
+        feedback.className = 'p-4 rounded-xl text-center font-bold text-lg bg-red-100 text-red-800 border-2 border-red-300';
+        feedback.innerText = `❌ Try again! That is not a ${chosen}.`;
+        speak(`Try again! That is not a ${chosen}.`);
+      }
+    }
+
+    function nextRiddle() {
+      currentRiddleIndex = (currentRiddleIndex + 1) % riddles.length;
+      loadRiddle();
+    }
+
+    // --- QUIZ ASSESSMENT LOGIC ---
+    function loadQuizQuestion() {
+      const q = quizQuestions[currentQuizIndex];
+      document.getElementById('qNumber').innerText = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
+      document.getElementById('qText').innerText = q.q;
+
+      // Update Quiz progress bar
+      const pct = ((currentQuizIndex) / quizQuestions.length) * 100;
+      document.getElementById('quizProgressBar').style.width = `${pct}%`;
+
+      const optionsBox = document.getElementById('qOptions');
+      optionsBox.innerHTML = q.options.map(opt => `
+        <button onclick="submitQuizAnswer('${opt}')" class="bg-slate-50 hover:bg-purple-100 text-slate-800 font-bold p-4 rounded-2xl border-2 border-slate-200 hover:border-purple-300 text-left transition-all">
+          ${opt}
+        </button>
+      `).join('');
+    }
+
+    function submitQuizAnswer(chosen) {
+      const q = quizQuestions[currentQuizIndex];
+      if (chosen === q.answer) {
+        quizScore++;
+        speak("Correct!");
+        addStars(5);
+      } else {
+        speak("Incorrect!");
+      }
+
+      document.getElementById('quizScoreText').innerText = `${quizScore} / ${quizQuestions.length}`;
+      currentQuizIndex++;
+
+      if (currentQuizIndex < quizQuestions.length) {
+        loadQuizQuestion();
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function showQuizResult() {
+      document.getElementById('quizProgressBar').style.width = `100%`;
+      document.getElementById('quizCard').classList.add('hidden');
+      const res = document.getElementById('quizResult');
+      res.classList.remove('hidden');
+
+      document.getElementById('finalScore').innerText = quizScore;
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      speak(`Congratulations! You completed the quiz with score ${quizScore} out of 10!`);
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      document.getElementById('quizScoreText').innerText = `0 / ${quizQuestions.length}`;
+      document.getElementById('quizCard').classList.remove('hidden');
+      document.getElementById('quizResult').classList.add('hidden');
+      loadQuizQuestion();
+    }
+
+    // --- REFLECTION & MOOD ---
+    function setMood(moodText) {
+      document.getElementById('moodFeedback').innerText = `You selected: ${moodText}`;
+      speak(`You feel ${moodText}`);
+    }
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+      renderObjects();
+      renderPracticeSentences();
+      renderAAnQuiz();
+      renderColors();
+      renderNumbers();
+      setCombineObject('pencil');
+      updateDialogue();
+      loadRiddle();
+      loadQuizQuestion();
+    }
+  </script>
+</body>
+</html>
